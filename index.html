@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>人類減脂助手 v14 Final</title>
+<meta name="theme-color" content="#2563eb">
+<link rel="manifest" href="./manifest.json">
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
+<style>
+:root{
+  --blue:#2563eb;--blue2:#1d4ed8;--bg:#f3f4f6;--card:#fff;--text:#172033;
+  --muted:#64748b;--line:#e5e7eb;--green:#16a34a;--orange:#f59e0b;--red:#ef4444;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:Arial,"Noto Sans TC",sans-serif;margin:0;background:var(--bg);color:var(--text)}
+header{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;padding:18px 16px 76px;border-bottom-left-radius:28px;border-bottom-right-radius:28px}
+header h1{font-size:24px;margin:0 0 8px}
+header p{margin:0;opacity:.92}
+main{max-width:1120px;margin:-58px auto 92px;padding:0 12px}
+.card{background:var(--card);margin:12px 0;padding:16px;border-radius:18px;box-shadow:0 2px 14px rgba(0,0,0,.08)}
+h2{font-size:20px;margin:0 0 12px} h3{font-size:17px;margin:14px 0 8px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.kpi{background:#f8fafc;border:1px solid var(--line);border-radius:14px;padding:12px}
+.kpi b{font-size:20px}
+.badge{display:inline-block;background:#eaf2ff;color:#1d4ed8;border-radius:999px;padding:5px 9px;margin:3px;font-size:13px}
+.small{font-size:13px;color:var(--muted);line-height:1.55}
+label{display:block;margin:9px 0}
+input,textarea,select{padding:10px;border:1px solid #cbd5e1;border-radius:10px;width:100%;margin:4px 0 10px;background:#fff;font-size:15px}
+button{border:0;border-radius:12px;padding:10px 12px;background:var(--blue);color:white;font-weight:bold;margin:3px;cursor:pointer}
+button.secondary{background:#64748b} button.green{background:var(--green)} button.orange{background:var(--orange)} button.red{background:var(--red)}
+table{width:100%;border-collapse:collapse;margin-top:8px;font-size:14px}
+th,td{border:1px solid var(--line);padding:8px;vertical-align:top}
+th{background:#eef2f7}
+details{border:1px solid var(--line);border-radius:14px;padding:12px;margin:10px 0;background:#fff}
+summary{font-weight:bold;cursor:pointer}
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.quick a{text-decoration:none;color:#111;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px;text-align:center;font-size:13px;box-shadow:0 1px 6px rgba(0,0,0,.05)}
+.quick span{display:block;font-size:22px;margin-bottom:4px}
+.section{scroll-margin-top:10px}
+.tabs{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);z-index:50;padding-bottom:env(safe-area-inset-bottom)}
+.tabs a{text-decoration:none;color:#334155;text-align:center;padding:8px 2px;font-size:12px}
+.tabs span{display:block;font-size:21px;margin-bottom:2px}
+.topnav{display:flex;gap:8px;overflow:auto;padding:8px 0 0}
+.topnav a{white-space:nowrap;text-decoration:none;color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:999px;padding:7px 10px;font-size:13px}
+.progressBox{height:8px;background:#e5e7eb;border-radius:999px;overflow:hidden;margin-top:6px}
+.progressBar{height:8px;background:var(--green);width:0%}
+.canvasWrap{width:100%;overflow-x:auto}
+canvas{max-width:100%;background:#fff;border:1px solid var(--line);border-radius:12px}
+@media(min-width:1000px){main{padding:0 18px}.desktop2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.tabs{max-width:520px;left:50%;transform:translateX(-50%);border-radius:18px 18px 0 0}}
+@media(max-width:760px){.grid,.grid3,.quick{grid-template-columns:1fr 1fr} main{padding:0 10px}.card{padding:14px} table{font-size:13px} header h1{font-size:22px}}
+@media(max-width:430px){.grid,.grid3{grid-template-columns:1fr}.quick{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<header>
+<h1>📱💻 人類減脂助手 v14 Final</h1>
+<p>桌機＋手機統一版｜60 kg → 52–55 kg｜兩天份備餐制</p>
+<div class="topnav">
+<a href="#home">首頁</a><a href="#today">今日</a><a href="#menu">菜單</a><a href="#prep">備餐</a><a href="#shopping">採買</a><a href="#eatout">外食</a><a href="#weight">體重</a>
+</div>
+</header>
+
+<main>
+<section class="card section" id="home">
+<h2>🏠 首頁 Dashboard</h2>
+<div class="grid3">
+<div class="kpi"><span class="small">目前體重</span><br><b id="latestTop">60.0 kg</b></div>
+<div class="kpi"><span class="small">第一階段</span><br><b>57.0 kg</b></div>
+<div class="kpi"><span class="small">最終目標</span><br><b>52–55 kg</b></div>
+<div class="kpi"><span class="small">今日飲水</span><br><b id="waterText">0 / 2800 ml</b><div class="progressBox"><div id="waterBar" class="progressBar"></div></div></div>
+<div class="kpi"><span class="small">減脂天數</span><br><b id="dayCount">0 天</b></div>
+<div class="kpi"><span class="small">睡眠目標</span><br><b>24:30</b></div>
+</div>
+<h3>快速入口</h3>
+<div class="quick">
+<a href="#today"><span>✅</span>今日任務</a>
+<a href="#schedule"><span>⏰</span>作息表</a>
+<a href="#water"><span>🥤</span>飲水中心</a>
+<a href="#weight"><span>⚖️</span>體重中心</a>
+<a href="#menu"><span>🍱</span>菜單中心</a>
+<a href="#prep"><span>👨‍🍳</span>備餐中心</a>
+<a href="#shopping"><span>🛒</span>採買中心</a>
+<a href="#eatout"><span>🍜</span>外食救援</a>
+<a href="#forgot"><span>🚨</span>忘記備餐</a>
+<a href="#cook"><span>🍳</span>料理資料庫</a>
+<a href="#cheat"><span>🍽️</span>自由餐</a>
+<a href="#review"><span>📝</span>週回顧</a>
+</div>
+</section>
+
+<section class="card section" id="today">
+<h2>✅ 今日模式</h2>
+<div class="desktop2">
+<div>
+<h3>每日打卡</h3>
+<label><input type="checkbox" class="dailyCheck"> 起床喝水 500 ml</label>
+<label><input type="checkbox" class="dailyCheck"> 運動 45 分鐘</label>
+<label><input type="checkbox" class="dailyCheck"> 早餐完成</label>
+<label><input type="checkbox" class="dailyCheck"> 午餐便當完成</label>
+<label><input type="checkbox" class="dailyCheck"> 晚餐便當完成</label>
+<label><input type="checkbox" class="dailyCheck"> 飲水達標</label>
+<label><input type="checkbox" class="dailyCheck"> 24:30 睡覺</label>
+<p>完成：<b id="taskCount">0 / 7</b></p>
+<label>今日備註</label>
+<textarea id="note" rows="3" placeholder="例如：今天跑步、午餐外食、精神狀態"></textarea>
+<button onclick="saveDay()">儲存今日紀錄</button>
+<button class="secondary" onclick="clearChecks()">清除勾選</button>
+<p id="dayStatus" class="small"></p>
+</div>
+<div>
+<h3>今日菜單提示</h3>
+<div id="todayMeal"></div>
+</div>
+</div>
+</section>
+
+<section class="card section" id="schedule">
+<h2>⏰ 作息表</h2>
+<table>
+<tr><th>時間</th><th>內容</th></tr>
+<tr><td>06:45</td><td>起床</td></tr>
+<tr><td>06:45~06:55</td><td>喝水 500 ml、盥洗</td></tr>
+<tr><td>06:55~07:10</td><td>運動前點心：香蕉半根約 50 g，或地瓜 100 g，二選一</td></tr>
+<tr><td>07:10~07:25</td><td>暖身、換運動服</td></tr>
+<tr><td>07:30~08:15</td><td>運動 45 分鐘：晴天跑步／快走／騎腳踏車；雨天室內循環</td></tr>
+<tr><td>08:15~08:30</td><td>緩和伸展</td></tr>
+<tr><td>08:30~08:50</td><td>洗澡整理</td></tr>
+<tr><td>08:50~09:00</td><td>早餐</td></tr>
+<tr><td>09:00</td><td>上班</td></tr>
+<tr><td>12:00~12:30</td><td>午餐便當</td></tr>
+<tr><td>17:30</td><td>下班到家</td></tr>
+<tr><td>17:40~18:00</td><td>晚餐便當</td></tr>
+<tr><td>18:30~22:00</td><td>上課</td></tr>
+<tr><td>22:30~23:30</td><td>放鬆時間</td></tr>
+<tr><td>23:30</td><td>若餓可補充：茶葉蛋 1~2 顆，或無糖豆漿 300 ml</td></tr>
+<tr><td>24:00</td><td>洗漱</td></tr>
+<tr><td>24:30</td><td>睡覺</td></tr>
+</table>
+</section>
+
+<section class="card section" id="water">
+<h2>🥤 飲水中心</h2>
+<div class="grid">
+<div class="kpi"><span class="small">今日累計</span><br><b id="waterText2">0 / 2800 ml</b><div class="progressBox"><div id="waterBar2" class="progressBar"></div></div></div>
+<div>
+<button onclick="addWater(300)">+300 ml</button>
+<button onclick="addWater(500)">+500 ml</button>
+<button onclick="addWater(1000)">+1000 ml</button>
+<button class="secondary" onclick="resetWater()">今日歸零</button>
+</div>
+</div>
+<h3>飲水時刻表</h3>
+<table>
+<tr><th>時間</th><th>水量</th><th>備註</th></tr>
+<tr><td>06:45</td><td>500 ml</td><td>起床後</td></tr>
+<tr><td>運動中</td><td>300 ml</td><td>小口喝</td></tr>
+<tr><td>08:50</td><td>300 ml</td><td>早餐後</td></tr>
+<tr><td>10:30</td><td>300 ml</td><td></td></tr>
+<tr><td>12:30</td><td>300 ml</td><td>午餐後</td></tr>
+<tr><td>14:30</td><td>300 ml</td><td></td></tr>
+<tr><td>16:30</td><td>300 ml</td><td></td></tr>
+<tr><td>20:00</td><td>300 ml</td><td>上課中</td></tr>
+<tr><td>23:00</td><td>200 ml</td><td>避免睡前太多</td></tr>
+</table>
+</section>
+
+<section class="card section" id="weight">
+<h2>⚖️ 體重中心</h2>
+<div class="desktop2">
+<div>
+<label>輸入體重 kg</label>
+<input id="w" type="number" step="0.1" placeholder="例如 60.0">
+<label>備註</label>
+<textarea id="wnote" rows="2" placeholder="例如：運動後量、外食日、睡眠不足"></textarea>
+<button onclick="saveWeight()">儲存體重</button>
+<button class="secondary" onclick="resetWeights()">清空紀錄</button>
+</div>
+<div>
+<h3>體重圖表</h3>
+<div class="canvasWrap"><canvas id="weightChart" width="700" height="260"></canvas></div>
+<p id="weightList" class="small"></p>
+</div>
+</div>
+</section>
+
+<section class="card section" id="menu">
+<h2>🍱 菜單中心</h2>
+<details open><summary>星期一、二</summary>
+<table><tr><th>餐別</th><th>菜名與份量</th><th>烹調方式</th><th>熱量/蛋白質</th></tr>
+<tr><td>早餐</td><td>地瓜 200 g＋水煮蛋 2 顆＋無糖豆漿 500 ml</td><td>地瓜電鍋蒸、雞蛋水煮</td><td>430 kcal / 27 g</td></tr>
+<tr><td>午餐</td><td>香煎雞胸便當：白飯 150 g、雞胸 180 g、大陸妹 200 g</td><td>雞胸乾煎；大陸妹汆燙</td><td>540 kcal / 48 g</td></tr>
+<tr><td>晚餐</td><td>乾煎鮭魚南瓜便當：鮭魚 150 g、南瓜 200 g、菠菜 150 g</td><td>鮭魚乾煎；南瓜電鍋蒸；菠菜汆燙</td><td>520 kcal / 35 g</td></tr>
+</table></details>
+<details><summary>星期三、四</summary>
+<table><tr><th>餐別</th><th>菜名與份量</th><th>烹調方式</th><th>熱量/蛋白質</th></tr>
+<tr><td>早餐</td><td>吐司 2 片＋水煮蛋 2 顆＋無糖豆漿 300 ml</td><td>水煮蛋</td><td>430 kcal / 28 g</td></tr>
+<tr><td>午餐</td><td>蒜香雞腿排便當：白飯 150 g、去皮雞腿排 180 g、高麗菜 200 g</td><td>雞腿排乾煎；高麗菜快炒或汆燙</td><td>610 kcal / 42 g</td></tr>
+<tr><td>晚餐</td><td>豆腐毛豆便當：板豆腐 300 g、毛豆 100 g、大陸妹 200 g、白飯 100 g</td><td>豆腐煎或燉；大陸妹汆燙</td><td>560 kcal / 38 g</td></tr>
+</table></details>
+<details><summary>星期五、六、日</summary>
+<table><tr><th>星期</th><th>菜名與份量</th><th>熱量/蛋白質</th></tr>
+<tr><td>五早餐</td><td>希臘優格 200 g＋蘋果 1 顆＋水煮蛋 2 顆</td><td>420 kcal / 30 g</td></tr>
+<tr><td>五午餐</td><td>清蒸魚肉便當：白飯 150 g、魚肉 180 g、大陸妹 200 g</td><td>520 kcal / 42 g</td></tr>
+<tr><td>五晚餐</td><td>香煎雞胸便當：白飯 100 g、雞胸 180 g、大陸妹 200 g</td><td>490 kcal / 48 g</td></tr>
+<tr><td>六早餐</td><td>同星期五早餐</td><td>420 kcal / 30 g</td></tr>
+<tr><td>六午餐</td><td>自由餐：火鍋／燒肉／義大利麵擇一，吃 7~8 分飽</td><td>不追求精準</td></tr>
+<tr><td>六晚餐</td><td>雞胸 150 g＋大陸妹 250 g＋白飯 100 g</td><td>440 kcal / 40 g</td></tr>
+<tr><td>日</td><td>家常餐：蛋白質優先，白飯 100~150 g，青菜 200 g 以上</td><td>1500~1700 kcal / 蛋白質 100 g 以上</td></tr>
+</table></details>
+</section>
+
+<section class="card section" id="prep">
+<h2>👨‍🍳 備餐中心</h2>
+<details open><summary>星期日 14:00~15:00：準備星期一、二</summary>
+<ul><li>白飯：生米約 2 杯，煮熟後分 4 份，每份熟飯約 150 g。</li><li>雞胸肉 360 g：選蒜香乾煎／義式乾煎／電鍋嫩雞，分 2 份。</li><li>鮭魚 300 g：乾煎或電鍋蒸，分 2 份。</li><li>大陸妹 400 g：洗好瀝乾，建議吃前再汆燙。</li><li>菠菜 300 g、南瓜 400 g：蒸或燙後分 2 份。</li></ul>
+</details>
+<details><summary>星期二 22:30~23:15：準備星期三、四</summary>
+<ul><li>熟飯 600 g，分 4 份。</li><li>去皮雞腿排 360 g，乾煎，分 2 份。</li><li>板豆腐 600 g＋毛豆 200 g，可做豆腐毛豆碗。</li><li>高麗菜 400 g、大陸妹 400 g。</li></ul>
+</details>
+<details><summary>星期四 22:30~23:15：準備星期五、六</summary>
+<ul><li>熟飯 500 g，分 4 份。</li><li>魚肉 360 g，清蒸或乾煎。</li><li>雞胸肉 330 g，分 2 份。</li><li>大陸妹 800 g，分午晚餐使用。</li></ul>
+</details>
+</section>
+
+<section class="card section" id="cook">
+<h2>🍳 料理資料庫</h2>
+<details open><summary>🐔 雞胸肉</summary>
+<ul><li>蒜香乾煎：雞胸 360 g＋蒜末 10 g＋鹽 3 g＋黑胡椒 3 g，醃 10 分鐘，中火每面約 4 分鐘。</li><li>義式香料：雞胸 360 g＋義式香料 5 g＋鹽 3 g，乾煎。</li><li>電鍋嫩雞：雞胸 360 g＋鹽＋黑胡椒，外鍋 1 杯水，跳起悶 10~15 分鐘。</li></ul>
+</details>
+<details><summary>🥬 大陸妹</summary>
+<ul><li>汆燙：水滾後下鍋 1~2 分鐘。</li><li>蒜炒：蒜末 10 g＋油 5 g，快炒 1~2 分鐘。</li><li>電鍋蒸：外鍋半杯水，約 5 分鐘，口感較軟。</li></ul>
+</details>
+<details><summary>🐟 魚類／鮭魚</summary>
+<ul><li>乾煎：中火每面 3~4 分鐘。</li><li>電鍋蒸：薑片＋少量醬油，外鍋半杯水。</li><li>味噌風：味噌少量抹表面，煎或蒸皆可。</li></ul>
+</details>
+<details><summary>🔁 本週可替換食材</summary>
+<table><tr><th>原食材</th><th>可替換</th></tr><tr><td>雞胸</td><td>里肌豬、去皮雞腿排</td></tr><tr><td>鮭魚</td><td>鯛魚、鱈魚、白肉魚</td></tr><tr><td>大陸妹</td><td>高麗菜、菠菜、青江菜</td></tr><tr><td>地瓜</td><td>白飯、南瓜、馬鈴薯</td></tr></table>
+</details>
+</section>
+
+<section class="card section" id="shopping">
+<h2>🛒 採買中心 Pro</h2>
+<table>
+<tr><th>分類</th><th>食材</th><th>數量</th><th>冷藏</th><th>冷凍</th><th>第一步</th><th>使用餐次</th></tr>
+<tr><td>蛋白質</td><td>🐔 雞胸肉</td><td>700 g</td><td>1~2 天</td><td>1~2 個月</td><td>分裝 180 g/包</td><td>一二午餐、五晚餐、六晚餐</td></tr>
+<tr><td>蛋白質</td><td>🍗 去皮雞腿排</td><td>400 g</td><td>1~2 天</td><td>1~2 個月</td><td>分 2 包</td><td>三四午餐</td></tr>
+<tr><td>蛋白質</td><td>🐟 鮭魚</td><td>300 g</td><td>1~2 天</td><td>約 1 個月</td><td>單片分裝</td><td>一二晚餐</td></tr>
+<tr><td>蛋白質</td><td>🐟 白肉魚</td><td>400 g</td><td>1~2 天</td><td>約 1 個月</td><td>單片分裝</td><td>五午餐</td></tr>
+<tr><td>蛋白質</td><td>🥚 雞蛋</td><td>18~20 顆</td><td>3~4 週</td><td>不建議</td><td>直接冷藏</td><td>早餐、救援餐</td></tr>
+<tr><td>蛋白質</td><td>◻️ 板豆腐</td><td>2~3 盒，每盒約 300 g</td><td>3~5 天</td><td>約 1 個月但口感改變</td><td>開封後盡快吃</td><td>三四晚餐</td></tr>
+<tr><td>蛋白質</td><td>🫛 毛豆</td><td>200~300 g</td><td>依標示</td><td>約 1 個月</td><td>分裝</td><td>三四晚餐</td></tr>
+<tr><td>碳水</td><td>🍚 白米</td><td>1~1.5 kg</td><td>不需要</td><td>不需要</td><td>常溫乾燥處</td><td>午晚餐</td></tr>
+<tr><td>碳水</td><td>🍠 地瓜</td><td>1.5 kg</td><td>熟地瓜 3~5 天</td><td>熟地瓜約 1 個月</td><td>可一次蒸 4~6 條</td><td>早餐、救援餐</td></tr>
+<tr><td>碳水</td><td>🎃 南瓜</td><td>800 g</td><td>切後 3~5 天</td><td>熟南瓜約 1 個月</td><td>未切常溫，切後冷藏</td><td>一二晚餐</td></tr>
+<tr><td>碳水</td><td>🍞 全麥吐司</td><td>1 條</td><td>3 天</td><td>2~4 週</td><td>吃不完冷凍</td><td>三四早餐</td></tr>
+<tr><td>蔬菜</td><td>🥬 大陸妹</td><td>1.2~1.6 kg</td><td>3~5 天</td><td>不建議</td><td>洗好瀝乾，包紙巾冷藏</td><td>多數便當</td></tr>
+<tr><td>蔬菜</td><td>🥬 高麗菜</td><td>1 顆，約 800~1000 g</td><td>1~2 週</td><td>約 1 個月但口感變軟</td><td>切面包保鮮膜</td><td>三四午餐</td></tr>
+<tr><td>蔬菜</td><td>🥬 菠菜</td><td>300 g</td><td>3~5 天</td><td>汆燙後約 1 個月</td><td>洗好瀝乾</td><td>一二晚餐</td></tr>
+<tr><td>水果</td><td>🍎 蘋果</td><td>3~4 顆</td><td>1~3 週</td><td>不建議</td><td>冷藏或陰涼處</td><td>五六早餐</td></tr>
+<tr><td>水果</td><td>🍌 香蕉</td><td>3~4 根</td><td>不建議</td><td>去皮切塊可冷凍 2~4 週</td><td>常溫，熟了可冷凍</td><td>運動前點心</td></tr>
+<tr><td>飲品</td><td>🥛 無糖豆漿</td><td>4~6 瓶，每瓶 400~500 ml</td><td>依標示</td><td>不建議</td><td>冷藏</td><td>早餐、救援餐</td></tr>
+<tr><td>飲品</td><td>🍶 希臘優格</td><td>2 盒，每盒約 200 g</td><td>依標示</td><td>不建議</td><td>冷藏</td><td>五六早餐</td></tr>
+<tr><td>調味</td><td>🧂 鹽、黑胡椒、蒜頭/蒜粉、醬油</td><td>少量</td><td>依品項</td><td>不需要</td><td>常溫乾燥處</td><td>料理調味</td></tr>
+<tr><td>備品</td><td>🍱 便當盒、保鮮盒、廚房紙巾</td><td>足量</td><td>不適用</td><td>不適用</td><td>清洗晾乾</td><td>備餐保存</td></tr>
+</table>
+</section>
+
+<section class="card section" id="eatout">
+<h2>🍜 外食救援</h2>
+<details open><summary>🌅 早餐</summary>
+<ul><li>7-ELEVEN：茶葉蛋 2 顆＋無糖豆漿 400~500 ml。</li><li>全家：蛋 2 顆＋無糖豆漿 400 ml＋地瓜 100~150 g。</li><li>早餐店：鮪魚蛋吐司或雞肉蛋吐司，少醬，飲料改無糖茶。</li></ul>
+</details>
+<details><summary>☀️ 午餐</summary>
+<ul><li>自助餐：飯半碗~1碗＋肉 150~200 g＋青菜 3 樣。</li><li>便利商店：雞胸 1 包＋蛋 1~2 顆＋地瓜 150 g。</li><li>八方：水餃 8~10 顆＋燙青菜 1 份。</li><li>麵店：陽春麵小碗＋滷蛋＋燙青菜。</li><li>火鍋：肉 150~200 g，飯半碗~1碗，湯少喝。</li></ul>
+</details>
+<details><summary>🌙 晚餐</summary>
+<ul><li>便利商店：雞胸肉＋茶葉蛋＋沙拉。</li><li>麵店：乾麵小碗＋豆干 1~2 片＋燙青菜；或陽春麵＋滷蛋＋燙青菜。</li><li>滷味：豆干 2 塊＋海帶 2 片＋滷蛋 1 顆＋大陸妹／高麗菜。</li><li>摩斯／麥當勞：烤雞類餐點＋無糖茶，避免薯條甜飲。</li></ul>
+</details>
+</section>
+
+<section class="card section" id="forgot">
+<h2>🚨 忘記備餐模式</h2>
+<table>
+<tr><th>情境</th><th>處理方式</th><th>目標</th></tr>
+<tr><td>早上發現沒午餐</td><td>自助餐：飯半碗~1碗＋雞肉／魚肉 150~200 g＋青菜 3 樣</td><td>不要餓到晚上暴食</td></tr>
+<tr><td>晚上沒便當</td><td>便利商店：雞胸 1 包＋茶葉蛋 1~2 顆＋地瓜 1 條</td><td>高蛋白、低失控</td></tr>
+<tr><td>上課前太趕</td><td>無糖豆漿 500 ml＋茶葉蛋 2 顆＋香蕉 1 根</td><td>快速補蛋白質與能量</td></tr>
+<tr><td>完全沒時間買</td><td>先喝無糖豆漿 500 ml，晚點再補正餐</td><td>避免亂吃甜食或炸物</td></tr>
+</table>
+</section>
+
+<section class="card section" id="cheat">
+<h2>🍽️ 自由餐管理</h2>
+<label><input type="checkbox" id="cheatUsed" onchange="saveCheat()"> 本週星期六午餐自由餐已使用</label>
+<p class="small">規則：自由餐不是自由日，吃 7~8 分飽，晚餐回歸清淡。</p>
+</section>
+
+<section class="card section" id="review">
+<h2>📝 週回顧</h2>
+<label>本週外食次數</label><input id="eatOutCount" type="number" min="0" placeholder="例如 3">
+<label>本週運動天數</label><input id="workoutDays" type="number" min="0" max="7" placeholder="例如 5">
+<label>本週心得</label><textarea id="weeklyNote" rows="3" placeholder="例如：雞胸吃膩、晚上容易餓、外食次數偏多"></textarea>
+<button onclick="saveReview()">儲存週回顧</button>
+<p id="reviewStatus" class="small"></p>
+</section>
+
+</main>
+
+<nav class="tabs">
+<a href="#home"><span>🏠</span>首頁</a>
+<a href="#today"><span>✅</span>任務</a>
+<a href="#menu"><span>🍱</span>菜單</a>
+<a href="#eatout"><span>🍜</span>外食</a>
+<a href="#weight"><span>⚖️</span>體重</a>
+</nav>
+
+<script>
+const today=new Date().toISOString().slice(0,10);
+const startDateKey="fatloss_start_date";
+if(!localStorage.getItem(startDateKey)) localStorage.setItem(startDateKey,today);
+let water=+(localStorage.getItem("water_"+today)||0);
+
+function renderWater(){
+  const pct=Math.min(100,Math.round(water/2800*100));
+  document.getElementById("waterText").innerText=water+" / 2800 ml";
+  document.getElementById("waterText2").innerText=water+" / 2800 ml";
+  document.getElementById("waterBar").style.width=pct+"%";
+  document.getElementById("waterBar2").style.width=pct+"%";
+}
+function addWater(v){water+=v;localStorage.setItem("water_"+today,water);renderWater();}
+function resetWater(){water=0;localStorage.setItem("water_"+today,water);renderWater();}
+
+function getChecks(){return Array.from(document.querySelectorAll(".dailyCheck")).map(x=>x.checked)}
+function setChecks(arr){document.querySelectorAll(".dailyCheck").forEach((x,i)=>x.checked=!!arr[i])}
+function updateTaskCount(){const arr=getChecks();document.getElementById("taskCount").innerText=arr.filter(Boolean).length+" / "+arr.length}
+document.querySelectorAll(".dailyCheck").forEach(x=>x.addEventListener("change",updateTaskCount));
+function loadDay(){const r=JSON.parse(localStorage.getItem("day_"+today)||"{}");if(r.checks)setChecks(r.checks);document.getElementById("note").value=r.note||"";updateTaskCount();}
+function saveDay(){localStorage.setItem("day_"+today,JSON.stringify({checks:getChecks(),note:document.getElementById("note").value}));document.getElementById("dayStatus").innerText="已儲存今日紀錄";}
+function clearChecks(){setChecks([]);updateTaskCount();}
+
+function saveWeight(){
+  const v=parseFloat(document.getElementById("w").value);
+  if(isNaN(v)){alert("請輸入體重");return}
+  let data=JSON.parse(localStorage.weights||"[]");
+  data.unshift({date:today,w:v,note:document.getElementById("wnote").value});
+  const seen={}; data=data.filter(r=>{const k=r.date+"_"+r.w; if(seen[k]) return false; seen[k]=true; return true;});
+  localStorage.weights=JSON.stringify(data.slice(0,60));
+  renderWeights();
+}
+function renderWeights(){
+  let data=JSON.parse(localStorage.weights||"[]");
+  document.getElementById("weightList").innerHTML=data.length?("<h3>最近紀錄</h3>"+data.slice(0,10).map(r=>`${r.date}：${r.w} kg ${r.note||""}`).join("<br>")):"尚未紀錄";
+  if(data.length)document.getElementById("latestTop").innerText=data[0].w.toFixed(1)+" kg";
+  drawChart(data.slice().reverse());
+}
+function resetWeights(){if(confirm("清空體重紀錄？")){localStorage.removeItem("weights");renderWeights();document.getElementById("latestTop").innerText="60.0 kg";}}
+function drawChart(data){
+  const c=document.getElementById("weightChart"),ctx=c.getContext("2d"),w=c.width,h=c.height;
+  ctx.clearRect(0,0,w,h);ctx.fillStyle="#fff";ctx.fillRect(0,0,w,h);
+  ctx.strokeStyle="#e5e7eb";ctx.lineWidth=1;
+  for(let i=0;i<5;i++){let y=30+i*(h-60)/4;ctx.beginPath();ctx.moveTo(40,y);ctx.lineTo(w-20,y);ctx.stroke();}
+  if(!data.length){ctx.fillStyle="#64748b";ctx.fillText("尚未有體重紀錄",45,60);return}
+  const vals=data.map(d=>d.w),min=Math.min(...vals,55)-0.5,max=Math.max(...vals,60)+0.5;
+  const x=i=>40+i*(w-70)/Math.max(1,data.length-1);
+  const y=v=>h-30-(v-min)*(h-60)/(max-min);
+  ctx.strokeStyle="#2563eb";ctx.lineWidth=3;ctx.beginPath();
+  data.forEach((d,i)=>{if(i===0)ctx.moveTo(x(i),y(d.w));else ctx.lineTo(x(i),y(d.w));});ctx.stroke();
+  ctx.fillStyle="#2563eb";data.forEach((d,i)=>{ctx.beginPath();ctx.arc(x(i),y(d.w),4,0,Math.PI*2);ctx.fill();});
+  ctx.fillStyle="#334155";ctx.font="13px Arial";ctx.fillText(max.toFixed(1)+"kg",5,35);ctx.fillText(min.toFixed(1)+"kg",5,h-28);
+}
+function renderDayCount(){
+  const s=new Date(localStorage.getItem(startDateKey)), n=new Date(today);
+  const diff=Math.max(1,Math.floor((n-s)/(1000*60*60*24))+1);
+  document.getElementById("dayCount").innerText=diff+" 天";
+}
+function todayMeal(){
+  const d=new Date().getDay();
+  let text="";
+  if(d===1||d===2) text="今天：地瓜蛋豆漿、雞胸便當、鮭魚南瓜便當。";
+  else if(d===3||d===4) text="今天：吐司蛋豆漿、雞腿排便當、豆腐毛豆便當。";
+  else if(d===5) text="今天：優格蘋果蛋、魚肉便當、雞胸便當。";
+  else if(d===6) text="今天：早餐照星期五；午餐自由餐；晚餐清淡回歸。";
+  else text="今天：家常餐，蛋白質優先，白飯 100~150 g，青菜 200 g 以上。";
+  document.getElementById("todayMeal").innerHTML="<p>"+text+"</p>";
+}
+function saveCheat(){localStorage.cheatUsed=document.getElementById("cheatUsed").checked?"1":"0"}
+function loadCheat(){document.getElementById("cheatUsed").checked=localStorage.cheatUsed==="1"}
+function saveReview(){
+  localStorage.weeklyReview=JSON.stringify({eatOutCount:document.getElementById("eatOutCount").value,workoutDays:document.getElementById("workoutDays").value,note:document.getElementById("weeklyNote").value,date:today});
+  document.getElementById("reviewStatus").innerText="已儲存週回顧。";
+}
+function loadReview(){
+  const r=JSON.parse(localStorage.weeklyReview||"{}");
+  document.getElementById("eatOutCount").value=r.eatOutCount||"";
+  document.getElementById("workoutDays").value=r.workoutDays||"";
+  document.getElementById("weeklyNote").value=r.note||"";
+}
+renderWater();loadDay();renderWeights();renderDayCount();todayMeal();loadCheat();loadReview();
+</script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js").catch(err => {
+      console.log("Service worker registration failed:", err);
+    });
+  });
+}
+</script>
+
+</body>
+</html>
